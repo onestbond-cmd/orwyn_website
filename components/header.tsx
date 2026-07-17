@@ -12,6 +12,7 @@ const navItems = [
   { label: "App", href: "/#app-showcase" },
   { label: "Why Orwyn", href: "/#why-orwyn" },
   { label: "FAQ", href: "/#faq" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ]
 
@@ -52,7 +53,7 @@ export function Header() {
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
-    if (window.location.pathname !== '/') {
+    if (window.location.pathname !== '/' || (!href.includes('#') && href !== '/')) {
       window.location.href = href;
       return;
     }
