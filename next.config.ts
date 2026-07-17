@@ -19,6 +19,24 @@ const nextConfig: NextConfig = {
 
   // 4. Security headers — applied to every route
   async headers() {
+    const isDev = process.env.NODE_ENV === 'development'
+
+    const cspDirectives = [
+      "default-src 'self'",
+      isDev
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://va.vercel-scripts.com"
+        : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://va.vercel-scripts.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https:",
+      isDev
+        ? "connect-src 'self' ws: wss: https://www.google-analytics.com https://analytics.google.com https://vitals.vercel-insights.com https://api.web3forms.com https://www.clarity.ms https://x.clarity.ms https://orwyn.us3.list-manage.com"
+        : "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://vitals.vercel-insights.com https://api.web3forms.com https://www.clarity.ms https://x.clarity.ms https://orwyn.us3.list-manage.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self' https://api.web3forms.com",
+    ]
+
     return [
       {
         source: '/(.*)',
@@ -45,17 +63,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://va.vercel-scripts.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https:",
-              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://vitals.vercel-insights.com https://api.web3forms.com https://www.clarity.ms https://x.clarity.ms https://orwyn.us3.list-manage.com",
-              "frame-ancestors 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https://api.web3forms.com",
-            ].join('; '),
+            value: cspDirectives.join('; '),
           },
           {
             key: 'Strict-Transport-Security',

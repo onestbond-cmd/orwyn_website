@@ -3,7 +3,19 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
 import { MessageCircle, Sparkles } from "lucide-react"
-import { WaitlistModal } from "@/components/waitlist-form"
+import dynamic from "next/dynamic"
+
+const WaitlistModal = dynamic(
+  () => import("@/components/waitlist-form").then((m) => m.WaitlistModal),
+  {
+    ssr: false,
+    loading: () => (
+      <button className="group relative px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 bg-foreground text-background hover:bg-foreground/90 hover:shadow-2xl hover:shadow-foreground/20 flex items-center gap-2 w-full sm:w-auto justify-center">
+        Join the waitlist
+      </button>
+    )
+  }
+)
 
 const humanPrompts = [
   "I had a hard day today...",
@@ -115,34 +127,18 @@ export function Hero() {
           </span>
         </motion.div>
         
-        {/* Main Headline - Beautiful white text with gradients */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1]">
-            <motion.span
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="block text-foreground/95"
-            >
-              Sometimes you just need
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="block mt-2 sm:mt-4"
-            >
-              <span className="text-foreground/95">someone who{" "}</span>
-              <span className="bg-gradient-to-r from-emotion-hope via-emotion-joy to-emotion-love bg-clip-text text-transparent drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 30px rgba(167, 243, 208, 0.3))' }}>
-                listens.
-              </span>
-            </motion.span>
-          </h1>
-        </motion.div>
+        {/* Main Headline - static for fast LCP, no fade-in on the LCP element */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1]">
+          <span className="block text-foreground/95">
+            Sometimes you just need
+          </span>
+          <span className="block mt-2 sm:mt-4">
+            <span className="text-foreground/95">someone who{" "}</span>
+            <span className="bg-gradient-to-r from-emotion-hope via-emotion-joy to-emotion-love bg-clip-text text-transparent drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 30px rgba(167, 243, 208, 0.3))' }}>
+              listens.
+            </span>
+          </span>
+        </h1>
 
         {/* Human conversation prompt - Enhanced visibility */}
         <motion.div

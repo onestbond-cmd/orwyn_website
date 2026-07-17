@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
+import Image from "next/image"
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -93,7 +94,7 @@ export function Header() {
               whileTap={{ scale: 0.98 }}
             >
               <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-lg shadow-glow-purple/20 group-hover:shadow-glow-purple/40 transition-shadow duration-300">
-                <img
+                <Image
                   src="/logo.png"
                   alt="Orwyn by Onestbond"
                   width={32}
